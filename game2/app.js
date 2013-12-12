@@ -11,6 +11,8 @@
     var isMobile = false;
     var isFullScreen = false;
 
+    var hasVibration = false;
+
     var paused = false;
     var speedInit = 15;
     var speed = speedInit;
@@ -29,6 +31,8 @@
 //	init();
 
     function init(){
+
+        hasVibration = (typeof(window.navigator.vibrate) === 'function');
 
         renderer = new THREE.WebGLRenderer( { antialias: false } );
 
@@ -272,16 +276,19 @@
                             updateScore();
                         }
                         if(poly.shape == 'tetra'){
+                            bumpShort();
                             playSound('break');
                             lives--;
                             updateLives();
                         }
                         if(poly.shape == 'cube'){
+                            bumpMedium();
                             playSound('break');
                             lives = lives - 2;
                             updateLives();
                         }
                         if(poly.shape == 'cone'){
+                            bumpLong();
                             playSound('break');
                             lives = lives - 5;
                             updateLives();
@@ -390,6 +397,21 @@
 
     }
 
+    function bumpShort() {
+       if (hasVibration) {
+           window.navigator.vibrate(100);
+       }
+    }
+    function bumpMedium() {
+       if (hasVibration) {
+           window.navigator.vibrate(200);
+       }
+    }
+    function bumpLong() {
+       if (hasVibration) {
+           window.navigator.vibrate(500);
+       }
+    }
 
     function playSound(sound){
         if(window.Audio){
